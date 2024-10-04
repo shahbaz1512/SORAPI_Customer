@@ -27,7 +27,7 @@ namespace SORAPI.Classes
         public string AccountType { get; set; }
         public string ChannelCode { get; set; }
         public string ProgramId { get; set; }
-        public string partner { get; set; }
+        public string PartnerId { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
         public string Address3 { get; set; }
@@ -50,15 +50,21 @@ namespace SORAPI.Classes
         public string Modifiedby { get; set; }
         public int Isremoved { get; set; }
         public string TopupAmount { get; set; }
+        public string TxnAmount { get; set; }
+        public string DailyLimit { get; set; }
+        public string MonthlyLimit { get; set; }
+        public string YearlyLimit { get; set; }
+        public string TransactionReferenceNumber { get; set; }
+        public string TransactionType { get; set; }
+        public string AccountNumber { get; set; }
+        public string CardNumber { get; set; }
+        public string PanNumber { get; set; }
+        public string ReserveFeild1 { get; set; }
         public string ReserveFeild2 { get; set; }
         public string ReserveFeild3 { get; set; }
         public string ReserveFeild4 { get; set; }
         public string ReserveFeild5 { get; set; }
         public string ReserveFeild6 { get; set; }
-        public string ReserveFeild7 { get; set; }
-        public string ReserveFeild8 { get; set; }
-        public string ReserveFeild9 { get; set; }
-        public string ReserveFeild10 { get; set; }
     }
 
     public class Response
