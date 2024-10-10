@@ -87,7 +87,7 @@ namespace SORAPI.Classes
     }
 
 
-    public class Customer
+    public class CustomerRequest
     {
         public int CustomerId { get; set; }
         public string Salutation { get; set; }
