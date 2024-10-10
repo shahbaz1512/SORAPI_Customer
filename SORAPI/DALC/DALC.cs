@@ -1,5 +1,6 @@
 ﻿using DAL;
 using Dapper;
+using Newtonsoft.Json.Linq;
 using Npgsql;
 using Serilog;
 using SORAPI.Classes;
@@ -166,55 +167,68 @@ namespace SORAPI.DALC
                     //var Dob = new DateOnly(request.Dob.Year,request.Dob.Month,request.Dob.Day);
                     // Define parameters with correct types
                     NpgsqlParameter[] parameters = new NpgsqlParameter[]
-                    {
-                        //new NpgsqlParameter("pid", NpgsqlTypes.NpgsqlDbType.Integer) { Value = request.Id },
-                        //new NpgsqlParameter("pcustomerid", NpgsqlTypes.NpgsqlDbType.Integer) { Value = request.CustomerId },
-                        new NpgsqlParameter("p_Salutation", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.Salutation ?? DBNull.Value},
-                        new NpgsqlParameter("p_FirstName", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.FirstName ?? DBNull.Value},
-                        new NpgsqlParameter("p_MiddleName", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.MiddleName ?? DBNull.Value},
-                        new NpgsqlParameter("p_LastName", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.LastName ?? DBNull.Value},
-                        new NpgsqlParameter("p_Gender", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.Gender ?? DBNull.Value},
-                        new NpgsqlParameter("p_DOB", NpgsqlTypes.NpgsqlDbType.Date) { Value = (object)request.Dob ?? DBNull.Value },
-                        new NpgsqlParameter("p_MaritalStatus", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.MaritalStatus ?? DBNull.Value},
-                        new NpgsqlParameter("p_MobileNumber", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.MobileNumber ?? DBNull.Value},
-                        new NpgsqlParameter("p_EmailID", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.EmailId ?? DBNull.Value},
-                        new NpgsqlParameter("p_OperationMode", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.OperationMode ?? DBNull.Value},
-                        new NpgsqlParameter("p_CustomerCategory", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.CustomerCategory ?? DBNull.Value},
-                        new NpgsqlParameter("p_Occupation", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.Occupation ?? DBNull.Value},
-                        new NpgsqlParameter("p_CompanyName", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.CompanyName ?? DBNull.Value},
-                        new NpgsqlParameter("p_ProfilePicture", NpgsqlTypes.NpgsqlDbType.Varchar) { Value =(object)request.ProfilePicture ?? DBNull.Value},
-                        new NpgsqlParameter("p_KycStatus", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.KycStatus ?? DBNull.Value},
-                        new NpgsqlParameter("p_AccountType", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.AccountType ?? DBNull.Value},
-                        new NpgsqlParameter("p_ChannelCode", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.ChannelCode ?? DBNull.Value},
-                        new NpgsqlParameter("p_ProgramID", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.ProgramId ?? DBNull.Value},
-                        new NpgsqlParameter("p_Partner", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.partner ?? DBNull.Value},
-                        new NpgsqlParameter("p_Address1", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.Address1 ?? DBNull.Value},
-                        new NpgsqlParameter("p_Address2", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.Address2 ?? DBNull.Value},
-                        new NpgsqlParameter("p_Address3", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.Address3 ?? DBNull.Value},
-                        new NpgsqlParameter("p_Country", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.Country ?? DBNull.Value},
-                        new NpgsqlParameter("p_State", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.State ?? DBNull.Value},
-                        new NpgsqlParameter("p_City", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.City ?? DBNull.Value},
-                        new NpgsqlParameter("p_Pincode", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.PinCode ?? DBNull.Value},
-                        new NpgsqlParameter("p_IDProofType", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.IdProofType ?? DBNull.Value},
-                        new NpgsqlParameter("p_IDInformation", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.IdInformation ?? DBNull.Value},
-                        new NpgsqlParameter("p_IssueDate", NpgsqlTypes.NpgsqlDbType.Date) { Value =(object)request.IssueDate ?? DBNull.Value},
-                        new NpgsqlParameter("p_ExpiryDate", NpgsqlTypes.NpgsqlDbType.Date) { Value = (object)request.ExpiryDate ?? DBNull.Value},
-                        new NpgsqlParameter("p_AccessType", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.AccessType ?? DBNull.Value},
-                        new NpgsqlParameter("p_Remarks", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.Remarks ?? DBNull.Value},
-                        new NpgsqlParameter("p_IsAuthorization", NpgsqlTypes.NpgsqlDbType.Bit) { Value = DBNull.Value},
-                        new NpgsqlParameter("p_AuthorizedBy", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.AuthorizedBy ?? DBNull.Value},
-                        //new NpgsqlParameter("p_AuthorizedOn", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.AuthorizedOn ?? DBNull.Value},
-                        new NpgsqlParameter("p_MailingType", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.MailingType ?? DBNull.Value},
-                        new NpgsqlParameter("p_Reason", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.Reason ?? DBNull.Value},
-                        new NpgsqlParameter("p_CreatedBy", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = (object)request.Createdby ?? DBNull.Value},
-                        new NpgsqlParameter("o_customerid", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = ""},
-                    };
+                      {
+                          new NpgsqlParameter("p_Salutation", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.Salutation ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_FirstName", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.FirstName ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_MiddleName", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.MiddleName ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_LastName", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.LastName ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_Gender", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.Gender ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_DOB", NpgsqlTypes.NpgsqlDbType.Date) { Value = request.Dob != default ? (object)request.Dob : DBNull.Value },
+                          new NpgsqlParameter("p_MaritalStatus", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.MaritalStatus ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_MobileNumber", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.MobileNumber ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_EmailID", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.EmailId ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_OperationMode", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.OperationMode ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_CustomerCategory", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.CustomerCategory ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_Occupation", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.Occupation ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_CompanyName", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.CompanyName ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_ProfilePicture", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.ProfilePicture ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_KycStatus", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.KycStatus ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_AccountType", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.AccountType ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_ChannelCode", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.ChannelCode ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_ProgramID", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.ProgramId ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_ProductCode", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.ProductCode ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_PartnerCode", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.PartnerCode ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_Partner", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.PartnerId ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_Address1", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.Address1 ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_Address2", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.Address2 ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_Address3", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.Address3 ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_Country", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.Country ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_State", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.State ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_City", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.City ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_Pincode", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.PinCode ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_IDProofType", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.IdProofType ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_IDInformation", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.IdInformation ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_IssueDate", NpgsqlTypes.NpgsqlDbType.Date) { Value = request.IssueDate != default ? (object)request.IssueDate : DBNull.Value },
+                          new NpgsqlParameter("p_ExpiryDate", NpgsqlTypes.NpgsqlDbType.Date) { Value = request.ExpiryDate != default ? (object)request.ExpiryDate : DBNull.Value },
+                          new NpgsqlParameter("p_AccessType", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.AccessType ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_Remarks", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.Remarks ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_IsAuthorization", NpgsqlTypes.NpgsqlDbType.Bit) { Value = DBNull.Value}, // Assuming it's a string
+                          new NpgsqlParameter("p_AuthorizedBy", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.AuthorizedBy ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_MailingType", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.MailingType ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_Reason", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.Reason ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_CreatedBy", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.Createdby ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_AccountNumber", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.AccountNumber ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_CardNumber", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.CardNumber ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_AmountLimit", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = request.AmountLimit }, // Ensure this is a decimal or double
+                          new NpgsqlParameter("p_DailyLimit", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = request.DailyLimit },
+                          new NpgsqlParameter("p_MonthlyLimit", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = request.MonthlyLimit },
+                          new NpgsqlParameter("p_Balance", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = request.Balance ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_ProgramCode", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.ProgramCode ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_SchemeType", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.SchemeType ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_AccountStatus", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.AccountStatus ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_PartnerID", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.PartnerId ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_ExpiryMonth", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.ExpiryMonth ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_ExpiryYear", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.ExpiryYear ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_ExpiryMMYY", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.ExpiryMMYY ?? (object)DBNull.Value },
+                          new NpgsqlParameter("p_MaskedCard", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.MaskedCard ?? (object)DBNull.Value },
+                          new NpgsqlParameter("o_customerid", NpgsqlTypes.NpgsqlDbType.Varchar) { Value ="" } // Output parameter
+                      };
 
                     // SQL query to call the function and retrieve results
-                    string sql = "call proc_insertcustomerinformation_test( @p_Salutation ,  @p_FirstName,   @p_MiddleName ,@p_LastName ,   @p_Gender ,  @p_DOB ,  @p_MaritalStatus ,   @p_MobileNumber ,  @p_EmailID ,  @p_OperationMode ,@p_CustomerCategory ,  @p_Occupation ,  @p_CompanyName ,   @p_profilePicture ,   @p_KycStatus,   @p_AccountType ,@p_ChannelCode ,  @p_ProgramID ,   @p_Partner ,  @p_Address1 ,  @p_Address2 ,   @p_Address3 ,  @p_Country ,   @p_State ,@p_City ,   @p_Pincode ,  @p_IDProofType ,  @p_IDInformation ,  @p_IssueDate ,  @p_ExpiryDate ,   @p_AccessType ,   @p_Remarks  ,@p_IsAuthorization,  @p_AuthorizedBy  ,   @p_MailingType ,  @p_Reason ,   @p_CreatedBy ,@o_customerid)";
-                    //"  @p_modifiedby ," +                                 "@p_ModifiedOn ,  @p_Reserve1 ,  @p_Reserve2 ,  @p_Reserve3 ,   @p_Reserve4 ,   @p_IsRemoved)";
+                    //old// string sql = "call proc_insertcustomerinformation_test( @p_Salutation ,  @p_FirstName,   @p_MiddleName ,@p_LastName ,   @p_Gender ,  @p_DOB ,  @p_MaritalStatus ,   @p_MobileNumber ,  @p_EmailID ,  @p_OperationMode ,@p_CustomerCategory ,  @p_Occupation ,  @p_CompanyName ,   @p_profilePicture ,   @p_KycStatus,   @p_AccountType ,@p_ChannelCode ,  @p_ProgramID ,   @p_Partner ,  @p_Address1 ,  @p_Address2 ,   @p_Address3 ,  @p_Country ,   @p_State ,@p_City ,   @p_Pincode ,  @p_IDProofType ,  @p_IDInformation ,  @p_IssueDate ,  @p_ExpiryDate ,   @p_AccessType ,   @p_Remarks  ,@p_IsAuthorization,  @p_AuthorizedBy  ,   @p_MailingType ,  @p_Reason ,   @p_CreatedBy ,@o_customerid)";
+                    string sql = "CALL proc_CustomerRegistration( " +"@p_Salutation, " +"@p_FirstName, " + "@p_MiddleName, " +"@p_LastName, " + "@p_Gender, " +"@p_DOB, " + "@p_MaritalStatus, " + "@p_MobileNumber, " + "@p_EmailID, " + "@p_OperationMode, " + "@p_CustomerCategory, " +  "@p_Occupation, " +  "@p_CompanyName, " +"@p_ProfilePicture, " + "@p_KycStatus, " + "@p_AccountType, " +   "@p_ChannelCode, " + "@p_ProgramID, " +  "@p_ProductCode, " +   "@p_PartnerCode, " + "@p_Partner, " +  "@p_Address1, " +   "@p_Address2, " +   "@p_Address3, " +  "@p_Country, " + "@p_State, " + "@p_City, " + "@p_Pincode, " + "@p_IDProofType, " +  "@p_IDInformation, " + "@p_IssueDate, " +  "@p_ExpiryDate, " + "@p_AccessType, " + "@p_Remarks, " + "@p_IsAuthorization, " + "@p_AuthorizedBy, " + "@p_MailingType, " +   "@p_Reason, " +  "@p_CreatedBy, " +  "@p_AccountNumber, " + "@p_CardNumber, " + "@p_AmountLimit, " + "@p_DailyLimit, " + "@p_MonthlyLimit, " + "@p_Balance, " + "@p_ProgramCode, " +  "@p_SchemeType, " + "@p_AccountStatus, " + "@p_PartnerID, " + "@p_ExpiryMonth, " + "@p_ExpiryYear, " + "@p_ExpiryMMYY, " +  "@p_MaskedCard, " + "@o_customerid)";
 
-                    //string sql = "call proc_insertcustomerinformation(@p_Salutation , @p_FirstName)";
+                    //"call proc_CustomerRegistration( @p_Salutation ,  @p_FirstName,   @p_MiddleName ,@p_LastName ,   @p_Gender ,  @p_DOB ,  @p_MaritalStatus ,   @p_MobileNumber ,  @p_EmailID ,  @p_OperationMode ,@p_CustomerCategory ,  @p_Occupation ,  @p_CompanyName ,   @p_profilePicture ,   @p_KycStatus,   @p_AccountType ,@p_ChannelCode ,  @p_ProgramID ,   @p_Partner ,  @p_Address1 ,  @p_Address2 ,   @p_Address3 ,  @p_Country ,   @p_State ,@p_City ,   @p_Pincode ,  @p_IDProofType ,  @p_IDInformation ,  @p_IssueDate ,  @p_ExpiryDate ,   @p_AccessType ,   @p_Remarks  ,@p_IsAuthorization,  @p_AuthorizedBy  ,   @p_MailingType ,  @p_Reason ,   @p_CreatedBy ,@o_customerid)";
 
                     // Execute the query and read results
                     using (var cmd = new NpgsqlCommand(sql, con))
@@ -275,7 +289,7 @@ namespace SORAPI.DALC
                         new NpgsqlParameter("p_AccountType", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.AccountType },
                         new NpgsqlParameter("p_ChannelCode", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.ChannelCode },
                         new NpgsqlParameter("p_ProgramID", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.ProgramId },
-                        new NpgsqlParameter("p_Partner", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.partner },
+                        new NpgsqlParameter("p_Partner", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.PartnerId },
                         new NpgsqlParameter("p_Address1", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.Address1 },
                         new NpgsqlParameter("p_Address2", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.Address2 },
                         new NpgsqlParameter("p_Address3", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = request.Address3 },
@@ -312,7 +326,7 @@ namespace SORAPI.DALC
                                  "@p_ChannelCode ,  @p_ProgramID ,   @p_Partner ,  @p_Address1 ,  @p_Address2 ,   @p_Address3 ,  @p_Country ,   @p_State ," +
                                  "@p_City ,   @p_Pincode ,  @p_IDProofType ,  @p_IDInformation ,  @p_IssueDate ,  @p_ExpiryDate ,   @p_AccessType ,   @p_Remarks ," +
                                  "@p_IsAuthorization ,  @p_AuthorizedBy ,   @p_AuthorizedOn ,   @p_MailingType ,  @p_Reason ,   @p_CreatedBy)";
-                                 //"  @p_modifiedby ,@p_ModifiedOn ,  @p_Reserve1 ,  @p_Reserve2 ,  @p_Reserve3 ,   @p_Reserve4 ,   @p_IsRemoved)";
+                    //"  @p_modifiedby ,@p_ModifiedOn ,  @p_Reserve1 ,  @p_Reserve2 ,  @p_Reserve3 ,   @p_Reserve4 ,   @p_IsRemoved)";
 
                     // Execute the query and read results
                     using (var cmd = new NpgsqlCommand(sql, con))

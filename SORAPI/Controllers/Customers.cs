@@ -11,12 +11,12 @@ namespace SORAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AsyncTransactionProcessing : ControllerBase
+    public class Customers : ControllerBase
     {
         private readonly ProcessAsyncTransactionInterface _ProcessAsyncTransactionInterface;
         private readonly Datavalidator _datavalidator;
         // _ibbpsInterface interface is injected dependency in controller
-        public AsyncTransactionProcessing(ProcessAsyncTransactionInterface TransactionInterfaceInterface, Datavalidator datavalidator)  //////Constructor class  with dependncy injection
+        public Customers(ProcessAsyncTransactionInterface TransactionInterfaceInterface, Datavalidator datavalidator)  //////Constructor class  with dependncy injection
         {
             _ProcessAsyncTransactionInterface = TransactionInterfaceInterface ?? throw new ArgumentNullException(nameof(TransactionInterfaceInterface));
             _datavalidator = datavalidator ?? throw new ArgumentException(nameof(TransactionInterfaceInterface));
